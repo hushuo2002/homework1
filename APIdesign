@@ -1,0 +1,122 @@
+Shipping and Transportation Web Services API
+
+
+前言
+接口概述
+概述
+船只的管理系统接口
+设计原则
+a)URI指向的是唯一资源对象
+b)URI隐式指向唯一集合列表
+c)避免资源路径嵌套（要有单一性）
+接口请求方式
+get方式
+	适用场景：获取资源，幂等型。
+post方式 
+适用场景：增删改数据。
+
+数据库设计
+1.carrier billing
+字段名称	说明	类型	可空	备注
+carrier_id	承运人ID	Int	必填	Primary Key
+carrier_balance	承运人账户余额	Int	必填	
+ship_id	船的号码	Int	必填	
+goods_num	货物数量	Int	必填	
+
+
+2.shipper account
+字段名称	说明	类型	可空	备注
+shipper_id	发货人ID	Int	必填	Primary Key
+shipper_balance	发货人账户余额	Int	必填	
+sendgoods_num	发货数量	Int	必填	
+
+
+3.shipping order
+字段名称	字段名称	类型	可空	备注
+ship_id	船只ID	Int	必填	Primary Key
+arriving_time	到达时间	Time	必填	
+setoff_time	出发时间	Time	必填	
+ 
+4.goods order
+字段名称	字段名称	类型	可空	备注
+goods_id	货物ID	Int	必填	Primary Key
+ship_id	载着货物的船的id	Int	必填	
+shipper_id	发货人id	Int	必填	
+
+
+接口
+1.登录
+接口协议：post
+请求参数：
+字段名称	字段名称	类型	可空
+userID	用户ID	Int	必填
+Password	用户密码	String	必填
+数据返回格式：
+{
+    "error_code": "200",
+    "reason": "success",
+    "result": {
+        "UserID": 1,
+        "UserName": "Alice",
+        "LoginPassword": "12345678",
+“Balance”：90，
+“Identity：”：shipper
+
+    }
+} 
+
+2.通过货物id查找船只号码
+接口协议：post
+请求参数：
+字段名称	字段名称	类型	可空
+goods_id	货物ID	Int	必填
+
+
+数据返回格式：
+查找成功：{
+"message":"success",
+"status":"100",
+“data”:[
+“ship_id”：1]
+}
+3.通过发货人id查找发货数量
+接口协议：post
+请求参数：
+字段名称	字段名称	类型	可空
+shipper_id	发货人ID	Int	必填
+数据返回格式：
+查找成功：
+{
+"message":"success",
+"status":"100",
+“data”：[
+“goods_num”：50]
+}
+4.通过船只id查找运送者id
+接口协议：post
+请求参数：
+字段名称	字段名称	类型	可空
+ship_id	船只ID	Int	必填
+
+数据返回格式：
+查询成功：{
+"message":"success",
+"status":"100",
+“data”：[
+“goods_num”：50]
+}
+5.通过船只id查找到达时间和离开时间
+接口协议：post
+请求参数：
+字段名称	字段名称	类型	可空
+ship_id	船只ID	Int	必填
+
+数据返回格式：
+查询成功：{
+"message":"success",
+"status":"100",
+“data”：[
+“arriving_time”：2023-4-30
+“setoff_time”：2023-5-1]
+
+}
